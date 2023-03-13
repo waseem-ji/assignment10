@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="css/signin.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/9c9eece858.js" crossorigin="anonymous"></script>
+    <script></script>
+
 
 
     <title>MySocial</title>
@@ -35,8 +37,9 @@
             </form>
             <ul class="navbar-nav ms-auto ">
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  <img src="{{asset(auth()->user()->profile_pic ?? 'https://via.placeholder.com/30x30')}}" alt="Profile Picture" class="rounded-circle" width="40" height="40">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+
+                  <img src="{{asset(auth()->user()->profile_pic ??  asset('images/profile/dummy.jpg') )}}" alt="Profile Picture" class="rounded-circle" width="40" height="40">
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                   <li><a class="dropdown-item" href="/feed">Profile</a></li>
@@ -65,4 +68,5 @@
 {{$slot}}
 
 </body>
+
 </html>

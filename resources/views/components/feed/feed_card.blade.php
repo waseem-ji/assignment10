@@ -20,7 +20,9 @@
                     @method('DELETE')
 
 
-                    <button type="submit" class="text-danger fw-bold w-100 text-decoration-none btn">Delete</button>
+                    <button type="submit"  onclick="return confirm('Are you sure you want to delete this item?');" class="text-danger fw-bold w-100 text-decoration-none btn" >Delete</button>
+
+
 
                   </form>
                 {{-- <a class="dropdown-item text-danger fw-bold" href="#">Delete</a> --}}

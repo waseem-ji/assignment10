@@ -2,7 +2,7 @@
     <div class="container-fluid vh-100" style="margin-top:100px">
         <div class="" style="margin-top:100px">
             <div class="rounded d-flex justify-content-center">
-                <div class="col-md-6 col-sm-12 shadow-lg p-5 bg-light">
+                <div class="col-md-5 col-sm-12 shadow-lg p-5 bg-light">
                     <div class="text-center">
                         <h3 class="text-primary">Sign In</h3>
                     </div>
@@ -27,7 +27,7 @@
                                 <p class="blockquote-footer text-danger">{{$message}} </p>
 
                             @enderror
-                            
+
                             <div class="d-flex justify-content-end ">
                                 <button class="btn btn-primary text-center mt-4" type="submit">
                                     Login

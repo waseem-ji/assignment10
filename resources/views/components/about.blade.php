@@ -2,12 +2,17 @@
  <div class="container pb-4">
     <div class="row">
         <div class="col p-2 mt-3 text-center">
-            <img src="{{asset(auth()->user()->profile_pic ?? 'https://via.placeholder.com/30x30')}}" alt="Profile Picture" class="rounded-circle" width="280" height="300">
+            <img src="{{asset(auth()->user()->profile_pic ??  asset('images/profile/dummy.jpg') )}}" alt="Profile Picture" class="rounded-circle" width="180" height="200">
         </div>
     </div>
     <div class="row">
         <div class="col text-center">
-            <span class="display-6 fw-bold">{{Str::ucfirst(auth()->user()->name)}} </span>
+            <span class="fs-3 mt-3 fw-bold">{{Str::ucfirst(auth()->user()->name)}} </span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col text-center">
+            <span class="fs-5 mt-3 fw-light">{{auth()->user()->email}} </span>
         </div>
     </div>
  </div>

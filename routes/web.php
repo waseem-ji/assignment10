@@ -20,9 +20,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/login' , function() {
-    return view('auth.login');
-});
+
 
 
 Route::middleware('guest')->group(function() {
@@ -60,6 +58,7 @@ Route::middleware('auth')->group(function() {
     Route::get('/feed',[FeedController::class, 'index'])->name('feed');
     Route::post('/feed',[FeedController::class, 'store']);
     Route::get('/feed/{post}/edit',[FeedController::class, 'edit']);
+    Route::patch('/feed/{post}/deleteImage',[FeedController::class, 'deletePicture']);
     Route::patch('/feed/{post}',[FeedController::class, 'update']);
     Route::delete('feed/{post}',[FeedController::class, 'destroy']);
 

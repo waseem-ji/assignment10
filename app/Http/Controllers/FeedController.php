@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Picture;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class FeedController extends Controller
 {
     public function index()
     {
-        $posts = Post::where('user_id',auth()->user()->id);
+        $posts = Post::where('user_id', auth()->user()->id);
 
-        if(request('search')){
-            $posts->where('body','like','%'.request('search').'%')
-                ->orWhere('title','like','%'.request('search').'%');
+        if (request('search')) {
+            $posts->where('body', 'like', '%#'.request('search').'%');
         }
 
         return view('feed.feed', [
-            'posts' => $posts->get()
+            'posts' => $posts->latest()->get()
 
         ]);
     }
@@ -26,7 +27,8 @@ class FeedController extends Controller
     {
         $attributes = request()->validate([
             'title' => ['required'],
-            'body' => ['required']
+            'body' => ['required'],
+            'images.*' => [ 'max:5']
         ]);
 
 
@@ -35,14 +37,18 @@ class FeedController extends Controller
         $attributes['user_id'] = auth()->id();
         $post= Post::create($attributes);
 
-        if($request->hasFile('images')) {
+        if ($request->hasFile('images')) {
             $images = $request->file('images');
 
 
-            foreach($images as $image) {
+
+
+
+
+            foreach ($images as $image) {
                 $filename = $image->store('public/images');
                 $post->pictures()->create([
-                    'url' => substr($filename,7),
+                    'url' => substr($filename, 7),
                     'post_id' => $post->id,
                 ]);
             }
@@ -50,35 +56,83 @@ class FeedController extends Controller
         $post->save();
 
         return redirect('/feed');
-
     }
 
     public function edit(Post $post)
     {
+        // make sure user cant edit other people post
 
-        return view('feed.edit' , ['post' => $post]);
+
+        if ($post->user_id !== auth()->user()->id) {
+            abort(403);
+        }
+
+
+        $pictures = Picture::where('post_id', $post->id)->get();
+
+        return view('feed.edit', compact('post', 'pictures'));
     }
 
     public function update(Post $post)
     {
-        // make sure user cant edit other people post
         $attributes = request()->validate([
             'title' => ['required'],
             'body' => ['required']
         ]);
         $attributes['user_id'] = auth()->id();
 
+        $pictures = Picture::where('post_id', $post->id)->get();
+
+        $existingPictures =[];
+
+
+        foreach ($pictures as $picture) {
+            $existingPictures[] = $picture;
+        }
+
+
+        // add new image
+        $newPictures = [];
+        if (request()->hasFile('new_images')) {
+            $images = request()->file('new_images');
+            foreach ($images as $image) {
+                $filename = $image->store('public/images');
+                $post->pictures()->create([
+                    'url' => substr($filename, 7),
+                    'post_id' => $post->id,
+                ]);
+            }
+        }
+        $allPictures = array_merge($existingPictures, $newPictures);
+        $post->pictures()->saveMany($allPictures);
+
+
+
+
+
         $post->update($attributes);
-
-        return redirect('feed')->with('success','successfully Updated');
-
-
+        return redirect('feed')->with('success', 'successfully Updated');
     }
 
     public function destroy(Post $post)
     {
         $post->delete();
-        return back()->with('success','post Deleted');
+        return back()->with('success', 'post Deleted');
     }
 
+    public function deletePicture(Post $post)
+    {
+        $pictures = Picture::where('post_id', $post->id)->get();
+
+
+
+        foreach ($pictures as $picture) {
+            // check if the user requested to delete this picture
+            if (request()->has('delete_picture_' . $picture->id)) {
+                Storage::delete($picture->url);
+                $picture->delete();
+            }
+        }
+        return back();
+    }
 }

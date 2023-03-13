@@ -19,10 +19,10 @@
                 <p class="text-danger"> {{$message}}</p>
             @enderror
         </div>
-        
+
         <div class="input-group mb-3">
-            <input type="file" class="form-control" name="images[]" multiple>
-            @error('images')
+            <input type="file" class="form-control" name="images[]" multiple max="5">
+            @error('images.*')
                 <p class="text-danger"> {{$message}}</p>
             @enderror
         </div>
